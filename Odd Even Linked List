@@ -1,0 +1,42 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/odd-even-linked-list/
+* Time Complexity: O(n)
+* Space Complexity: O(1)
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        ListNode odd = new ListNode();//0
+        ListNode even = new ListNode();//0
+        ListNode todd = odd;//0
+        ListNode teven = even;//0
+        ListNode temp = head;//1
+        int i = 1;
+        while(temp!=null){//1->2->3->4->5->null
+            ListNode future = temp.next;
+            temp.next = null;
+            if(i%2==0){
+                teven.next = temp;//0->2
+                teven = teven.next;//2
+            }else{
+                todd.next = temp;//0->1
+                todd = todd.next;//1
+            }
+            i++;//3
+            temp = future;//3
+        }
+        todd.next = even.next;
+        return odd.next;
+    }
+}
