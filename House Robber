@@ -1,0 +1,28 @@
+/*
+@author: Darshika
+@Question Link: https://leetcode.com/problems/house-robber/
+@Time Complexity: O(n)
+@Space Complexity: O(1)
+*/
+
+class Solution {
+    public int rob(int[] nums) {
+        int cur = 0;
+        int prev = 0;
+        int pprev = 0;
+        
+        for(int i = 0;i<nums.length;i++){
+            // if(i == 0){
+            //     cur = nums[i];
+            // }else if(i == 1){
+            //     cur = Math.max(nums[i],prev);
+            // }else{
+            //     dp[i] = Math.max(nums[i]+dp[i-2],dp[i-1]);
+            // }
+            cur = Math.max(nums[i]+pprev,prev);
+            pprev = prev;
+            prev = cur;
+        }
+        return cur;
+    }
+}
