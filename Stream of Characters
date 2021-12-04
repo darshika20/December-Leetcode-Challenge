@@ -1,0 +1,75 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/stream-of-characters/
+* Time Complexity: O(n*m)n-no of words m-no of characters in each word 
+* Space Complexity: O(n*m)
+*/
+
+class StreamChecker {
+    
+    Trie root = new Trie();
+    String stream = "";
+
+    public StreamChecker(String[] words) {//O(n*m)
+        
+        for(String word : words){//O(n) n-no of words
+            word = new StringBuilder(word).reverse().toString();
+            Trie dummy = root;
+            insert(word,dummy);
+        }
+        
+        
+    }
+    
+    public boolean query(char letter) {//O(k) -length of stream
+        
+        stream = letter+stream;
+        Trie dummy = root;
+        return find(stream,dummy);
+        
+    }
+    
+    public void insert(String word,Trie root){
+        
+        for(int i = 0;i<word.length();i++){//O(m) - no of characters in each word
+            int idx = word.charAt(i)-'a';
+            
+            if(root.children[idx] == null){
+                root.children[idx] = new Trie();                
+            }
+            
+            root = root.children[idx];
+        }
+        root.end = true;
+    }
+    
+    public boolean find(String word, Trie root){
+        for(int i = 0;i<word.length();i++){
+            int idx = word.charAt(i)-'a';
+            
+            if(root.children[idx] == null){
+                return false;              
+            }
+            
+            root = root.children[idx];
+            if(root.end){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+class Trie{
+    
+    Trie[] children = new Trie[26];
+    boolean end = false;
+    
+    
+}
+
+/**
+ * Your StreamChecker object will be instantiated and called as such:
+ * StreamChecker obj = new StreamChecker(words);
+ * boolean param_1 = obj.query(letter);
+ */
