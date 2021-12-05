@@ -1,0 +1,44 @@
+/**
+* author: Darshika
+* Question link: https://leetcode.com/problems/house-robber-iii/
+* Time Complexity: O(n) n - no of nodes
+* Space Complexity: O(n) 
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int rob(TreeNode root) {
+        HousePair res = solve(root);
+        return Math.max(res.withRobbery,res.withoutRobbery);
+    }
+    
+    private class HousePair{
+        int withRobbery;
+        int withoutRobbery;
+    }
+    
+    private HousePair solve(TreeNode root){
+        if(root == null) return new HousePair();
+        
+        HousePair left = solve(root.left);
+        HousePair right = solve(root.right);
+        HousePair res = new HousePair();
+        res.withRobbery = root.val + left.withoutRobbery + right.withoutRobbery;
+        res.withoutRobbery = Math.max(left.withoutRobbery,left.withRobbery) + Math.max(right.withoutRobbery,right.withRobbery);
+        return res;
+    }
+}
