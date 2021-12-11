@@ -1,0 +1,36 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/nth-magical-number/
+* Time Complexity: O(log17)
+* Space Complexity: O(1)
+*/
+
+class Solution {
+    public int nthMagicalNumber(int n, int a, int b) {
+        long lcm = findLcm(a,b);
+        long lo = Math.min(a,b);
+        long hi = (long)(Math.pow(10,17));
+        while(lo<=hi){
+            long mid = (lo+hi)/2;
+            long temp = (mid/a) + (mid/b) - (mid/lcm);
+            if(temp < n){
+                lo = mid+1;
+            }else{
+                hi = mid-1;
+            }
+        }
+        return (int)(lo%1000000007);
+        
+    }
+    
+    private long findLcm(int a, int b){ //a = 12 b= 38 q=0. r=12
+        return a*b/gcd(a,b);           //a=38.  b= 12 q=3. r=2
+    }                                 //a=12.  b = 2 q=6. r =0
+                                      //a=2.  b= 0
+    private long gcd(int a,int b){
+        if(b == 0){
+            return a;
+        }
+        return gcd(b,a%b);
+    }
+}
