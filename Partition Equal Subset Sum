@@ -1,0 +1,32 @@
+/**
+* author: Darshika
+* question link: https://leetcode.com/problems/partition-equal-subset-sum/
+* time complexity: O(nm) m-totalsum/2
+* space complexity : O(m)
+*/
+
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for(int val : nums){
+            sum += val;
+        }
+        if(sum % 2 == 1){
+            return false;
+        }
+        sum /= 2;
+        boolean[] dp = new boolean[sum+1];//[true,true,true,true,false]
+        dp[0] = true;
+        for(int i : nums){//[1,2,5] 5
+            for(int j = dp.length-1 ;j>=0 ; j--){//4
+                if(i <= j){
+                    dp[j] = dp[j] || dp[j-i];
+                }
+                if(j== dp.length-1 && dp[j]){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
