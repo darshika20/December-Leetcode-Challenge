@@ -1,0 +1,35 @@
+/**
+* author: Darshika
+* Question Link : https://leetcode.com/problems/numbers-at-most-n-given-digit-set/
+* Time Complexity : O(k*m) k- no of digits in n , m-length of digits array
+* Space Complexity : O(k)
+*/
+
+class Solution {
+    public int atMostNGivenDigitSet(String[] digits, int n) {
+        String nstr = n+"";
+        int dlen = digits.length;
+        int k = nstr.length();
+        int[] dp = new int[k+1];
+        dp[k] = 1;
+        
+        for(int i = k-1;i>=0;i--){
+            int no = nstr.charAt(i)-'0';
+            for(String digit : digits){
+                int d = digit.charAt(0) - '0';
+                if(d < no){
+                    dp[i] += Math.pow(dlen,k-i-1);
+                }else if(d == no){
+                    dp[i] += dp[i+1];
+                }
+            }
+        }
+        
+        for(int i = 1;i<k;i++){
+            dp[0] += Math.pow(dlen,i);
+        }
+        
+        return dp[0];
+    }
+}
+//5367
