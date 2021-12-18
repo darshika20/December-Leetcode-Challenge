@@ -1,0 +1,67 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/minimum-height-trees/
+* Time Complexity: O(n)
+* Space Complexity: O(n)
+*/
+
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        
+        //edge case
+        if(edges.length == 0){
+            List<Integer> res = new ArrayList<>();
+            res.add(0);
+            return res;
+        }
+        
+        int[] degree = new int[n];
+        Map<Integer,HashSet<Integer>> graph = new HashMap<>();
+        
+        //create graph and fill degree array
+        for(int[] edge : edges){
+            degree[edge[0]]++;
+            degree[edge[1]]++;
+            graph.putIfAbsent(edge[0],new HashSet<>());
+            graph.get(edge[0]).add(edge[1]);
+            graph.putIfAbsent(edge[1],new HashSet<>());
+            graph.get(edge[1]).add(edge[0]);
+        }
+        
+        Queue<Integer> leaves = new ArrayDeque<>();
+        
+        //initialize leaves queue with all leaf nodes
+        for(int i = 0;i<n;i++){
+            if(graph.get(i).size() == 1){
+                leaves.add(i);
+                degree[i]--;
+            }
+        }
+        
+        //execute bfs untill max 2 elements are left to be processed
+        int size = n;
+        while(size > 2){
+            int count = leaves.size();
+            size = size - count;
+            for(int i =0;i<count;i++){
+                int leaf = leaves.remove();
+                for(int parent : graph.get(leaf)){
+                    degree[parent]--;
+                    if(degree[parent] == 1){
+                        leaves.add(parent);
+                    }
+                }
+            }
+            
+        }
+        
+        //create answer list with the leaves which are having minimum height
+        List<Integer> minHeight = new ArrayList<>();
+        while(leaves.size()>0){
+            minHeight.add(leaves.remove());
+        }
+        
+        return minHeight;
+        
+    }
+}
