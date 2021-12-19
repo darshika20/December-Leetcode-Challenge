@@ -1,0 +1,43 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/decode-string/
+* Time Complexity : O(n*m) n- length of string , m - digit
+* Space Complexity: O(n)
+*/
+
+class Solution {
+    public String decodeString(String s) {//3[a]2[bc]
+        Stack<String> st = new Stack<>();//[aaa,bc]
+        for(int i = 0;i<s.length();i++){
+            String c = s.charAt(i)+"";//]
+            if(!c.equals("]")){
+                st.push(c);
+            }else{
+                StringBuffer sb = new StringBuffer();//bc
+                while(!st.peek().equals("[")){
+                    sb.insert(0,st.pop());
+                }
+                st.pop();
+                StringBuffer num = new StringBuffer();//2
+                char ch = st.peek().charAt(0);//2
+                while(ch >= '0' && ch <= '9'){
+                    num.insert(0,st.pop());
+                    if(st.size() == 0) break;
+                    ch = st.peek().charAt(0);//a
+                }
+                int no = Integer.parseInt(num.toString());//2
+                StringBuffer temp = new StringBuffer();//bcbc
+                for(int j = 0;j<no;j++){
+                    temp.append(sb);
+                }
+                System.out.println(temp);
+                st.push(temp.toString());
+            }
+        }
+        String res = "";
+        while(st.size()>0){
+            res = st.pop() + res;
+        }
+        return res;
+    }
+}
