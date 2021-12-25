@@ -1,0 +1,72 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/reorder-list/
+* Time Complexity: O(n)
+* Space Complexity: O(1)
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if (head.next == null || head.next.next == null ) {
+            return;
+        }
+        ListNode first = head;
+        ListNode second = middle(head);
+        second = reverse(second);
+        merge(first,second);
+        
+    }
+    
+    public ListNode middle (ListNode head) {//O(n)
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        prev.next = null;
+        return slow;
+    }
+    
+    public ListNode reverse (ListNode head) {//O(n/2)
+        ListNode prev = null ;
+        while( head != null){
+            ListNode future = head.next ;
+            head.next = prev;
+            prev = head;
+            head = future;
+        }
+        return prev;
+    }
+    
+    public void merge (ListNode first, ListNode second) {//O(n/2)
+        ListNode prev = null;
+        while (first != null && second != null) {
+            ListNode temp1 = first.next;
+            ListNode temp2 = second.next;
+            if (prev != null) {
+                prev.next = first;
+            }
+            first.next = second;
+            prev = second;
+            first = temp1;
+            second = temp2;
+            
+        }
+        if (second != null) {
+            prev.next = second;
+        }
+    }
+}
