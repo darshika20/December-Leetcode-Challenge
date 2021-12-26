@@ -1,0 +1,57 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/course-schedule-ii/
+* Time Complexity: O(n+m) n-numCourses , m-prerequisites array length
+* Space Complexity: O(n)
+*/
+
+class Solution {
+    boolean hasCycle;
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        //create prereq map
+        Map<Integer,List<Integer>> map = new HashMap<>();
+        for(int i = 0 ;i< numCourses ; i++){
+            map.put(i,new ArrayList<>());
+        }
+        for(int i = 0;i<prerequisites.length;i++){
+            map.get(prerequisites[i][0]).add(prerequisites[i][1]);
+        }
+        
+        hasCycle = false;
+        boolean[] visited = new boolean[numCourses];
+        List<Integer> res = new ArrayList<>();
+        //iterate and do dfs over all courses 
+        for(int i = 0;i<numCourses;i++){
+            if(visited[i] == false){
+                dfs(i,map,visited,new boolean[numCourses],res);
+            }
+            if(hasCycle){
+                return new int[0];
+            }
+        }
+        if(res.size()!=numCourses){
+            return new int[0];
+        }
+        int[] ans = res.stream().mapToInt(i->i).toArray();
+        return ans;
+    }
+    
+    public void dfs(int src,Map<Integer,List<Integer>> map, boolean[] visited, boolean[] path, List<Integer> res){
+        if(path[src]){
+            hasCycle = true;
+            return;
+        }
+        path[src] = true;
+        for(int prereq : map.get(src)){
+            if(!visited[prereq]){
+                dfs(prereq,map,visited,path,res);
+                if(hasCycle){
+                    return;
+                }
+            }
+        }
+        visited[src] = true;
+        res.add(src);
+        path[src] = false;
+    }
+}
