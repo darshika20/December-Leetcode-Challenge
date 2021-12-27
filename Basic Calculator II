@@ -1,0 +1,59 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/basic-calculator-ii/
+* Time Complexity: O(n) 
+* Space Coplexity: O(n)
+*/
+
+class Solution {
+    public int calculate(String s) {
+        Stack<Character> op = new Stack<>();//[+,*]
+        Stack<String> nos = new Stack<>();//[3,2]
+        int mult = 1;
+        String n = "";//0
+        for(char c : s.toCharArray()){//3+2*2  2
+            if(c >='0' && c <= '9'){
+                n += c+"";//2
+            }else if(c == '+' || c == '-' || c == '*' || c == '/'){
+                nos.push(n);
+                n = "";
+                while(op.size() > 0 && prec(op.peek()) >= prec(c)){
+                    calc(op,nos);
+                }
+                op.push(c);//
+            }else{
+                continue;
+            }
+        }
+        nos.push(n);
+        while(op.size() > 0){
+            calc(op,nos);
+        }
+        return Integer.parseInt(nos.pop());
+    }
+    
+    private void calc(Stack<Character> op, Stack<String> nos){
+        int n2 = Integer.parseInt(nos.pop());
+        int n1 = Integer.parseInt(nos.pop());
+        int o = op.pop();
+        int n = 0;
+        if( o == '+'){
+            n = n1+n2;
+        }else if(o == '-'){
+            n = n1-n2;
+        }else if(o == '*'){
+            n = n1*n2;
+        }else{
+            n = n1/n2;
+        }
+        nos.push(n+"");
+    }
+    
+    private int prec(char c){
+        if(c=='+' || c=='-'){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+}
