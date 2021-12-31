@@ -1,0 +1,42 @@
+/**
+* author: Darshika
+* Question Link: https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/
+* Time Complexity: O(n)
+* Space Complexity: O(n)
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private int res = 0;
+    public int maxAncestorDiff(TreeNode root) {
+        dfs(root,root.val,root.val);
+        return res;
+    }
+    
+    private void dfs(TreeNode root,int minVal,int maxVal){
+        if(root == null){
+            return;
+        }
+        res = Math.max(res,
+                       Math.max(Math.abs(root.val-minVal),
+                                Math.abs(root.val-maxVal)));
+        minVal = Math.min(minVal,root.val);
+        maxVal = Math.max(maxVal,root.val);
+        dfs(root.left,minVal,maxVal);
+        dfs(root.right,minVal,maxVal);
+    }
+}
